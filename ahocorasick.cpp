@@ -4,17 +4,11 @@
 int const N = 100100;
 int const A = 26;
 
-///next -- переходы в боре
 int next[N][A];
-///link -- суффиксные ссылки, считаются лениво через getLink
 int link[N];
-///go -- переходы в автомате, считаются лениво через getGo
 int go[N][A];
-///prev -- предки
 int prev[N];
-///back -- ребра из предков
 int back[N];
-///leaf -- номер строки или -1
 int leaf[N];
 int sz;
 

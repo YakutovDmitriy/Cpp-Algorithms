@@ -31,7 +31,7 @@ int main() {
 		if (cross != 0) {
 			return cross > 0;
 		}
-		return (a[0] < p) == (p < q);
+		return p < q;
 	});
 	int size = 0;
 	for (int i = 0; i < n; ++i) {

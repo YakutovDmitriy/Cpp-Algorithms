@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <cstdlib>
 
+typedef long long ll;
+
 struct Point {
 	int x, y;
 };
@@ -11,7 +13,7 @@ bool operator<(Point const& a, Point const& b) {
 }
 
 int turn(Point const& a, Point const& b, Point const& c) {
-	long long cross = (long long) (b.x - a.x) * (c.y - b.y) - (long long) (b.y - a.y) * (c.x - b.x);
+	ll cross = (ll) (b.x - a.x) * (c.y - b.y) - (ll) (b.y - a.y) * (c.x - b.x);
 	return cross > 0 ? 1 : cross < 0 ? -1 : 0;
 }
 

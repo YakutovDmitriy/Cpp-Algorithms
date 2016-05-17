@@ -1,35 +1,27 @@
 #include <cstdio>
 #include <cstdlib>
 
-long long get_rand() {
-	long long ret = 0;
-	for (int i = 0; i < 3; ++i) {
-		ret <<= 16;
-		ret |= rand();
-	}
-	return ret;
-}
-
 struct Node {
 	int info, sz;
-	long long prior;
-	Node * l, * r;
+	int prior;
+	Node *l, *r;
 	
 	Node() {}
 	
 	Node(int info) 
-		: info(info), sz(1), prior(get_rand()), l(NULL), r(NULL) {}
+		: info(info), sz(1), prior(rand() | (rand() << 16)), 
+		l(NULL), r(NULL) {}
 };
 
-int size(Node * v) {
+int size(Node* v) {
 	return v ? v->sz : 0;
 }
 
-void upd(Node * v) {
+void upd(Node* v) {
 	if (v) v->sz = 1 + size(v->l) + size(v->r);
 }
 
-Node * merge(Node * a, Node * b) {
+Node* merge(Node* a, Node* b) {
 	if (!a) return b;
 	if (!b) return a;
 	if (a->prior > b->prior) {
@@ -43,7 +35,7 @@ Node * merge(Node * a, Node * b) {
 	}
 }
 
-void split(Node * v, int cnt, Node *& l, Node *& r) {
+void split(Node* v, int cnt, Node*& l, Node*& r) {
 	if (!v) {
 		l = r = NULL;
 		return;
@@ -63,7 +55,7 @@ int main() {
 	freopen("movetofront.in", "r", stdin);
 	freopen("movetofront.out", "w", stdout);
 	srand(1510);
-	Node * v = NULL;
+	Node* v = NULL;
 	int n, m;
 	scanf("%d%d", &n, &m);
 	for (int i = 0; i < n; ++i) {
@@ -79,7 +71,7 @@ int main() {
 		v = merge(b, merge(a, c));
 	}
 	for (int i = 0; i < n; ++i) {
-		Node * r;
+		Node* r;
 		split(v, 1, r, v);
 		printf("%d ", r->info);
 	}

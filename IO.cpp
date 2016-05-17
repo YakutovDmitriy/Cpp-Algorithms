@@ -1,7 +1,7 @@
 #include <cstdio>
 
 namespace io {
-int const BUF_SIZE = 40960;
+int const BUF_SIZE = 409600;
 int rpos, rlen;
 char rbuf[BUF_SIZE];
 int wpos;

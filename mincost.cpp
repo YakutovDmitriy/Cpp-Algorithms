@@ -5,7 +5,8 @@
 
 int const N = 111;
 int const M = 5555;
-long long INFL = 9223372036854775807;
+long long const INFL = 9223372036854775807LL;
+int const INF = 1e9;
 
 struct Edge {
 	int to;
@@ -25,56 +26,53 @@ int main() {
 	freopen("mincost.out", "w", stdout);
 	int n, m;
 	scanf("%d%d", &n, &m);
-	for (int i = 0; i < m; ++i) {
+	for (int sz = 0, i = 0; i < m; ++i) {
 		int from, to, capacity, cost;
 		scanf("%d%d%d%d", &from, &to, &capacity, &cost);
 		--from, --to;
-		edges[2 * i] = {to, capacity, 0, cost};
-		edges[2 * i + 1] = {from, 0, 0, -cost};
-		e[from].push_back(2 * i);
-		e[to].push_back(2 * i + 1);
+		e[from].push_back(sz);
+		edges[sz++] = {to, capacity, 0, cost};
+		e[to].push_back(sz);
+		edges[sz++] = {from, 0, 0, -cost};
 	}
 	int const source = 0;
 	int const target = n - 1;
-	long long cost = 0;
-	std::fill(dist, dist + n, INFL);
-	std::fill(edgeTo, edgeTo + n, -1);
-	dist[source] = 0;
+	std::fill(phi, phi + n, INFL);
+	phi[source] = 0;
 	for (int i = 0; i < n - 1; ++i) {
 		for (int v = 0; v < n; ++v) {
-			if (dist[v] == INFL) {
+			if (phi[v] == INFL) {
 				continue;
 			}
 			for (int i : e[v]) {
 				Edge const& edge = edges[i];
-				long long now = dist[v] + edge.cost;
-				if (edge.capacity > edge.flow && (edgeTo[edge.to] == -1 || now < dist[edge.to])) {
-					dist[edge.to] = now;
-					edgeTo[edge.to] = i;
+				long long now = phi[v] + edge.cost;
+				if (edge.capacity > edge.flow && now < phi[edge.to]) {
+					phi[edge.to] = now;
 				}
 			}
 		}
 	}
+	long long cost = 0;
+	std::set<std::pair<long long, int>> q;
 	while (true) {
-		std::copy(dist, dist + n, phi);
 		std::fill(edgeTo, edgeTo + n, -1);
 		dist[source] = 0;
-		edgeTo[source] = source;
-		std::set<std::pair<long long, int>> q;
+		edgeTo[source] = M;
+		q.clear();
 		q.insert({dist[source], source});
 		while (!q.empty()) {
 			int v = q.begin()->second;
-			if (v == target) {
-				break;
-			}
+			long long d = phi[v] + dist[v];
 			q.erase(q.begin());
 			for (int i : e[v]) {
 				Edge const& edge = edges[i];
-				long long now = phi[v] + dist[v] + edge.cost - phi[edge.to];
-				if (edge.capacity > edge.flow && (edgeTo[edge.to] == -1 || now < dist[edge.to])) {
+				int to = edge.to;
+				long long now = d + edge.cost - phi[to];
+				if (edge.capacity > edge.flow && (edgeTo[to] == -1 || now < dist[to])) {
 					q.erase({dist[edge.to], edge.to});
-					dist[edge.to] = now;
-					edgeTo[edge.to] = i;
+					dist[to] = now;
+					edgeTo[to] = i;
 					q.insert({dist[edge.to], edge.to});
 				}
 			}
@@ -82,16 +80,23 @@ int main() {
 		if (edgeTo[target] == -1) {
 			break;
 		}
-		long long add = INFL;
-		for (int v = target; v != source; v = edges[edgeTo[v] ^ 1].to) {
-			Edge& edge = edges[edgeTo[v]];
-			add = std::min<long long>(add, edge.capacity - edge.flow);
+		int add = INF;
+		for (int v = target; v != source;) {
+			int x = edgeTo[v];
+			Edge const& edge = edges[x];
+			add = std::min(add, edge.capacity - edge.flow);
+			v = edges[x ^ 1].to;
 		}
-		for (int v = target; v != source; v = edges[edgeTo[v] ^ 1].to) {
-			Edge& edge = edges[edgeTo[v]];
+		for (int v = target; v != source;) {
+			int x = edgeTo[v];
+			Edge& edge = edges[x];
 			edge.flow += add;
-			edges[edgeTo[v] ^ 1].flow -= add;
-			cost += add * edge.cost;
+			edges[x ^ 1].flow -= add;
+			cost += (long long) add * edge.cost;
+			v = edges[x ^ 1].to;
+		}
+		for (int i = 0; i < n; ++i) {
+			phi[i] += dist[i];
 		}
 	}
 	printf("%I64d\n", cost);

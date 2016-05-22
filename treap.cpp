@@ -17,7 +17,7 @@ int size(Node* v) {
 	return v ? v->sz : 0;
 }
 
-void upd(Node* v) {
+void update(Node* v) {
 	if (v) v->sz = 1 + size(v->l) + size(v->r);
 }
 
@@ -26,11 +26,11 @@ Node* merge(Node* a, Node* b) {
 	if (!b) return a;
 	if (a->prior > b->prior) {
 		a->r = merge(a->r, b);
-		upd(a);
+		update(a);
 		return a;
 	} else {
 		b->l = merge(a, b->l);
-		upd(b);
+		update(b);
 		return b;
 	}
 }
@@ -42,11 +42,11 @@ void split(Node* v, int cnt, Node*& l, Node*& r) {
 	}
 	if (size(v->l) >= cnt) {
 		split(v->l, cnt, l, v->l);
-		upd(v);
+		update(v);
 		r = v;
 	} else {
 		split(v->r, cnt - 1 - size(v->l), v->r, r);
-		upd(v);
+		update(v);
 		l = v;
 	}
 }

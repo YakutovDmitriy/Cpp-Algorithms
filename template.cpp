@@ -8,6 +8,7 @@
 
 using std::istream; using std::ostream; using std::fixed; using std::greater;
 using std::tuple; using std::tie; using std::make_pair; using std::multiset;
+using std::nth_element; using std::min_element; using std::max_element;
 using std::vector; using std::set; using std::map; using std::string;
 using std::fill; using std::copy; using std::sort; using std::unique;
 using std::unordered_set; using std::unordered_map; using std::pair;
@@ -16,7 +17,6 @@ using std::cin; using std::cout; using std::cerr; using std::endl;
 using std::lower_bound; using std::upper_bound; using std::deque;
 using std::min; using std::max; using std::swap; using std::abs;
 using std::priority_queue; using std::queue; using std::bitset;
-using std::nth_element;
 
 typedef long long ll;
 typedef long double ld;

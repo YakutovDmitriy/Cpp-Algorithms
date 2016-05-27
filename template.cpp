@@ -17,6 +17,7 @@ using std::cin; using std::cout; using std::cerr; using std::endl;
 using std::lower_bound; using std::upper_bound; using std::deque;
 using std::min; using std::max; using std::swap; using std::abs;
 using std::priority_queue; using std::queue; using std::bitset;
+using std::make_tuple;
 
 typedef long long ll;
 typedef long double ld;

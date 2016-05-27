@@ -25,10 +25,16 @@ void addEdge(int from, int to, int cap) {
 	all.push_back(Edge(from, 0));
 }
 
-void clear(int n) {
+void clearGraph(int n) {
 	all.clear();
 	for (int i = 0; i < n; ++i) {
 		edges[i].clear();
+	}
+}
+
+void clearFlow() {
+	for (auto& edge : all) {
+		edge.flow = 0;
 	}
 }
 
@@ -76,11 +82,7 @@ long long getFlow(int source, int target, int n) {
 			break;
 		}
 		std::fill(index, index + n, 0);
-		while (true) {
-			int flow = dfs(source, target, INF);
-			if (flow == 0) {
-				break;
-			}
+		while (int flow = dfs(source, target, INF)) {
 			ret += flow;
 		}
 	}

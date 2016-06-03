@@ -17,13 +17,16 @@ using std::cin; using std::cout; using std::cerr; using std::endl;
 using std::lower_bound; using std::upper_bound; using std::deque;
 using std::min; using std::max; using std::swap; using std::abs;
 using std::priority_queue; using std::queue; using std::bitset;
-using std::make_tuple;
+using std::make_tuple; using std::iota;
 
 typedef long long ll;
 typedef long double ld;
 
-int const INF = (int) 1e9;
-ll const INFL = (ll) 1e18;
+ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<ll>(), std::mt19937(1510)); return gen() % (y - x + 1) + x; }
+ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
+
+int const INF = 100 + (int) 1e9;
+ll const INFL = 100 + (ll) 1e18;
 ld const PI = 3.1415926535897932384626433832795028;
 
 
@@ -46,11 +49,9 @@ int main() {
 	cerr.precision(6);
 	cerr << fixed;
 	
-	srand(1510);
-
 	solve();
 
 #ifdef LOCAL
-	cerr << "time: " << clock() << " ms" << endl;
+	cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;
 #endif
 }

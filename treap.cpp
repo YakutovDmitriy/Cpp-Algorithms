@@ -93,12 +93,30 @@ void split_cnt(Node* v, int cnt, Node*& l, Node*& r) {
 	}
 }
 
+void split_info(Node* v, int info, Node*& l, Node*& r) {
+	if (!v) {
+		l = r = NULL;
+		return;
+	}
+	push(v);
+	if (v->info >= info) {
+		split_info(v->l, info, l, v->l);
+		update(v);
+		r = v;
+	} else {
+		split_info(v->r, info, v->r, r);
+		update(v);
+		l = v;
+	}
+}
+
 Node* root_of(Node* v) {
 	while (v && v->p) {
 		v = v->p;
 	}
 	return v;
 }
+
 
 
 

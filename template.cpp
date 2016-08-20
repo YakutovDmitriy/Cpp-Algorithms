@@ -21,9 +21,11 @@ using std::make_tuple; using std::iota;
 
 typedef long long ll;
 typedef long double ld;
+typedef unsigned int uint;
 
 ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<ll>(), std::mt19937(960172)); return gen() % (y - x + 1) + x; }
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
+template<typename T> T sqr(T const& a) { return a * a; }
 
 int const INF = 100 + (int) 1e9;
 ll const INFL = 100 + (ll) 1e18;

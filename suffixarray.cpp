@@ -21,16 +21,14 @@ void buildSA(int n) {
 	for (int i = 0; i < n; ++i) ++start[s[i] + 1];
 	for (int i = 1; i < A; ++i) start[i] += start[i - 1];
 	for (int i = 0; i < n; ++i) sa[start[s[i]]++] = i;
+	for (int i = 0; i < n; ++i) --start[s[i]];
 	std::copy(s, s + n, cl);
-	std::fill(start, start + A, 0);
-	for (int i = 0; i < n; ++i) ++start[s[i] + 1];
-	for (int i = 1; i < A; ++i) start[i] += start[i - 1];
 	for (int half = 1; half < n; half *= 2) {
 		for (int i = 0; i < n; ++i) {
-			sa[i] -= half;
-			if (sa[i] < 0) sa[i] += n;
+			int x = sa[i] - half;
+			if (x < 0) x += n;
+			newSa[start[cl[x]]++] = x;
 		}
-		for (int i = 0; i < n; ++i) newSa[start[cl[sa[i]]]++] = sa[i];
 		newCl[newSa[0]] = 0;
 		start[0] = 0;
 		int sz = 1;

@@ -72,7 +72,7 @@ void putnum(T x) {
 	} while (x != 0);
 	while (sz-- > 0) putch(numbuf[sz]);
 }
-};
+}
 
 int main() {
 	long long x = io::nextlong();

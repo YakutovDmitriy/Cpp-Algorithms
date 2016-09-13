@@ -1,103 +1,178 @@
-#include <cstdio>
-#include <vector>
-#include <algorithm>
-#include <set>
+#include <bits/stdc++.h>
 
-int const N = 111;
-int const M = 5555;
-long long const INFL = 9223372036854775807LL;
-int const INF = 1e9;
+#if (_WIN32 || __WIN32__)
+#  define LLD "%I64d"
+#else
+#  define LLD "%lld"
+#endif
 
-struct Edge {
-	int to;
-	int capacity;
-	int flow;
-	int cost;
+using std::istream; using std::ostream; using std::fixed; using std::greater;
+using std::tuple; using std::tie; using std::make_pair; using std::multiset;
+using std::nth_element; using std::min_element; using std::max_element;
+using std::vector; using std::set; using std::map; using std::string;
+using std::fill; using std::copy; using std::sort; using std::unique;
+using std::unordered_set; using std::unordered_map; using std::pair;
+using std::next_permutation; using std::reverse; using std::rotate;
+using std::cin; using std::cout; using std::cerr; using std::endl;
+using std::lower_bound; using std::upper_bound; using std::deque;
+using std::min; using std::max; using std::swap; using std::abs;
+using std::priority_queue; using std::queue; using std::bitset;
+using std::make_tuple; using std::iota;
+
+typedef long long ll;
+typedef long double ld;
+typedef unsigned int uint;
+
+ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<ll>(), std::mt19937(960172)); return gen() % (y - x + 1) + x; }
+ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
+template<typename T> T sqr(T const& a) { return a * a; }
+
+int const INF = 100 + (int) 1e9;
+ll const INFL = 100 + (ll) 1e18;
+ld const PI = 3.1415926535897932384626433832795028;
+
+int const N = 3333;
+
+struct edge_t {
+    int to, cap, flow, cost;
+    
+    edge_t() {}
+    
+    edge_t(int to, int cap, int cost) :
+        to(to), cap(cap), flow(0), cost(cost) {}
 };
 
-Edge edges[M];
-std::vector<int> e[N];
-long long dist[N];
-int edgeTo[N];
-long long phi[N];
+vector<edge_t> edges;
+vector<int> g[N];
+
+void clear_flow() {
+    for (auto& e : edges) {
+        e.flow = 0;
+    }
+}
+
+void clear_graph() {
+    edges.clear();
+    for (int i = 0; i < N; ++i) {
+        g[i].clear();
+    }
+}
+
+void add_edge(int v, int to, int cap, int cost) {
+    g[v].push_back(edges.size());
+    edges.emplace_back(to, cap, cost);
+    g[to].push_back(edges.size());
+    edges.emplace_back(v, 0, -cost);
+}
+
+pair<ll, int> min_cost_max_flow(int source, int sink, int n) {
+    ll cost = 0;
+    int flow = 0;
+    while (true) {
+        static int q[N * N], in_q[N], dist[N], prev[N];
+        int tail = 0;
+        q[tail++] = source;
+        fill(dist, dist + n, INF);
+        dist[source] = 0;
+        in_q[source] = true;
+        for (int head = 0; head < tail; ++head) {
+            int v = q[head];
+            in_q[v] = false;
+            for (int x : g[v]) {
+                edge_t const& e = edges[x];
+                int to = e.to;
+                if (e.flow < e.cap && dist[to] > dist[v] + e.cost) {
+                    dist[to] = dist[v] + e.cost;
+                    prev[to] = x;
+                    if (!in_q[to]) {
+                        q[tail++] = to;
+                        in_q[to] = true;
+                    }
+                }
+            }
+        }
+        if (dist[sink] == INF) {
+            break;
+        }
+        int cur_flow = INF;
+        for (int v = sink; v != source;) {
+            int x = prev[v];
+            cur_flow = min(cur_flow, edges[x].cap - edges[x].flow);
+            v = edges[x ^ 1].to;
+        }
+        flow += cur_flow;
+        cost += (ll) cur_flow * dist[sink];
+        for (int v = sink; v != source;) {
+            int x = prev[v];
+            edges[x].flow += cur_flow;
+            edges[x ^ 1].flow -= cur_flow;
+            v = edges[x ^ 1].to;
+        }
+    }
+    return {cost, flow};
+}
+
+
+void solve() {
+    static int a[N];
+    
+    int n;
+    scanf("%d", &n);
+    
+    if (n == 1) {
+        cout << 0 << endl;
+        return;
+    }
+    
+    for (int i = 0; i < n; ++i) {
+        scanf("%d", a + i);
+    }
+    
+    int sz = n + 1;
+    int sink = sz++;
+    int source = sz++;
+    
+    add_edge(source, 1, INF, 1);
+    add_edge(source, n - 1, INF, 1);
+    
+    for (int i = 1; i < n; ++i) {
+        int d = a[i] - a[i - 1];
+        if (d > 1) {
+            add_edge(source, i, d - 1, 0);
+        } else if (d <= 0) {
+            add_edge(i, sink, -d + 1, 0);
+        }
+    }
+    
+    for (int i = 1; i < n; ++i) {
+        if (i > 1) {
+            add_edge(i, i - 1, INF, 1);
+        }
+        if (i < n - 1) {
+            add_edge(i, i + 1, INF, 1);
+        }
+    }
+    
+    auto res = min_cost_max_flow(source, sink, sz);
+    
+    //cerr << "flow = " << res.second << endl;
+    
+    printf("%I64d\n", res.first);
+ 
+}
+
+
 
 int main() {
-	freopen("mincost.in", "r", stdin);
-	freopen("mincost.out", "w", stdout);
-	int n, m;
-	scanf("%d%d", &n, &m);
-	for (int sz = 0, i = 0; i < m; ++i) {
-		int from, to, capacity, cost;
-		scanf("%d%d%d%d", &from, &to, &capacity, &cost);
-		--from, --to;
-		e[from].push_back(sz);
-		edges[sz++] = {to, capacity, 0, cost};
-		e[to].push_back(sz);
-		edges[sz++] = {from, 0, 0, -cost};
-	}
-	int const source = 0;
-	int const target = n - 1;
-	std::fill(phi, phi + n, INFL);
-	phi[source] = 0;
-	for (int i = 0; i < n - 1; ++i) {
-		for (int v = 0; v < n; ++v) {
-			if (phi[v] == INFL) {
-				continue;
-			}
-			for (int i : e[v]) {
-				Edge const& edge = edges[i];
-				long long now = phi[v] + edge.cost;
-				if (edge.capacity > edge.flow && now < phi[edge.to]) {
-					phi[edge.to] = now;
-				}
-			}
-		}
-	}
-	long long cost = 0;
-	std::set<std::pair<long long, int>> q;
-	while (true) {
-		std::fill(edgeTo, edgeTo + n, -1);
-		dist[source] = 0;
-		edgeTo[source] = M;
-		q.clear();
-		q.insert({dist[source], source});
-		while (!q.empty()) {
-			int v = q.begin()->second;
-			long long d = phi[v] + dist[v];
-			q.erase(q.begin());
-			for (int i : e[v]) {
-				Edge const& edge = edges[i];
-				int to = edge.to;
-				long long now = d + edge.cost - phi[to];
-				if (edge.capacity > edge.flow && (edgeTo[to] == -1 || now < dist[to])) {
-					q.erase({dist[edge.to], edge.to});
-					dist[to] = now;
-					edgeTo[to] = i;
-					q.insert({dist[edge.to], edge.to});
-				}
-			}
-		}
-		if (edgeTo[target] == -1) {
-			break;
-		}
-		int add = INF;
-		for (int v = target; v != source;) {
-			int x = edgeTo[v];
-			Edge const& edge = edges[x];
-			add = std::min(add, edge.capacity - edge.flow);
-			v = edges[x ^ 1].to;
-		}
-		for (int v = target; v != source;) {
-			int x = edgeTo[v];
-			Edge& edge = edges[x];
-			edge.flow += add;
-			edges[x ^ 1].flow -= add;
-			cost += (long long) add * edge.cost;
-			v = edges[x ^ 1].to;
-		}
-		for (int i = 0; i < n; ++i) {
-			phi[i] += dist[i];
-		}
-	}
-	printf("%I64d\n", cost);
+
+    cout.precision(15);
+    cout << fixed;
+    cerr.precision(6);
+    cerr << fixed;
+    
+    solve();
+
+#ifdef LOCAL
+    cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;
+#endif
 }

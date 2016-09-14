@@ -30,8 +30,7 @@ std::mt19937 mt19937(960172);
 
 ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<ll>(), mt19937); return gen() % (y - x + 1) + x; }
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
-template<typename T> T sqr(T const& a) { return a * a; }
-
+ll sqr(int a) { return (ll) a * a; } ld sqr(ld a) { return a * a; }
 
 
 

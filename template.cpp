@@ -23,37 +23,38 @@ typedef long long ll;
 typedef long double ld;
 typedef unsigned int uint;
 
-ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<ll>(), std::mt19937(960172)); return gen() % (y - x + 1) + x; }
-ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
-template<typename T> T sqr(T const& a) { return a * a; }
-
 int const INF = 100 + (int) 1e9;
 ll const INFL = 100 + (ll) 1e18;
 ld const PI = 3.1415926535897932384626433832795028;
+std::mt19937 mt19937(960172);
+
+ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<ll>(), mt19937); return gen() % (y - x + 1) + x; }
+ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
+template<typename T> T sqr(T const& a) { return a * a; }
 
 
 
 
 
 void solve() {
-	
-	
-	
-	
+    
+    
+    
+    
 }
 
 
 
 int main() {
 
-	cout.precision(15);
-	cout << fixed;
-	cerr.precision(6);
-	cerr << fixed;
-	
-	solve();
+    cout.precision(15);
+    cout << fixed;
+    cerr.precision(6);
+    cerr << fixed;
+    
+    solve();
 
 #ifdef LOCAL
-	cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;
+    cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;
 #endif
 }

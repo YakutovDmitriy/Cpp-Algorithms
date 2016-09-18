@@ -52,7 +52,7 @@ int main() {
     cerr << fixed;
     
     solve();
-
+    
 #ifdef LOCAL
     cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;
 #endif

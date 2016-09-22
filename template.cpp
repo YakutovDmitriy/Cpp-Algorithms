@@ -22,10 +22,11 @@ using std::make_tuple; using std::iota;
 typedef long long ll;
 typedef long double ld;
 typedef unsigned int uint;
+typedef unsigned long long ull;
 
 int const INF = 100 + (int) 1e9;
 ll const INFL = 100 + (ll) 1e18;
-ld const PI = 3.1415926535897932384626433832795028;
+ld const PI = 3.1415926535897932384626433832795028L;
 std::mt19937 mt19937(960172);
 
 ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<ll>(), mt19937); return gen() % (y - x + 1) + x; }

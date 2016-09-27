@@ -1,23 +1,13 @@
 #include <bits/stdc++.h>
+//#include <fcntl.h>
 
-#if (_WIN32 || __WIN32__)
-#  define LLD "%I64d"
-#else
-#  define LLD "%lld"
-#endif
-
-using std::istream; using std::ostream; using std::fixed; using std::greater;
-using std::tuple; using std::tie; using std::make_pair; using std::multiset;
-using std::nth_element; using std::min_element; using std::max_element;
-using std::vector; using std::set; using std::map; using std::string;
-using std::fill; using std::copy; using std::sort; using std::unique;
-using std::unordered_set; using std::unordered_map; using std::pair;
-using std::next_permutation; using std::reverse; using std::rotate;
-using std::cin; using std::cout; using std::cerr; using std::endl;
-using std::lower_bound; using std::upper_bound; using std::deque;
-using std::min; using std::max; using std::swap; using std::abs;
-using std::priority_queue; using std::queue; using std::bitset;
-using std::make_tuple; using std::iota;
+using std::max; using std::swap; using std::abs; using std::priority_queue; using std::queue; using std::bitset; using std::make_tuple; 
+using std::istream; using std::ostream; using std::fixed; using std::greater; using std::tuple; using std::tie; using std::make_pair;
+using std::cout; using std::cerr; using std::endl; using std::lower_bound; using std::upper_bound; using std::deque; using std::min; 
+using std::map; using std::string; using std::fill; using std::copy; using std::sort; using std::unique; using std::unordered_set; 
+using std::multiset; using std::nth_element; using std::min_element; using std::max_element; using std::vector; using std::set; 
+using std::unordered_map; using std::pair; using std::next_permutation; using std::reverse; using std::rotate; using std::cin; 
+using std::iota; using std::function; using std::shuffle;
 
 typedef long long ll;
 typedef long double ld;
@@ -26,7 +16,7 @@ typedef unsigned long long ull;
 
 int const INF = 100 + (int) 1e9;
 ll const INFL = 100 + (ll) 1e18;
-ld const PI = 3.1415926535897932384626433832795028L;
+ld const PI = 3.141592653589793238462643L;
 std::mt19937 mt19937(960172);
 
 ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<ll>(), mt19937); return gen() % (y - x + 1) + x; }
@@ -46,7 +36,10 @@ void solve() {
 
 
 int main() {
-
+    
+    //freopen("", "r", stdin);
+    //freopen("", "w", stdout);
+    
     cout.precision(15);
     cout << fixed;
     cerr.precision(6);

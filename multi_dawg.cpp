@@ -23,22 +23,14 @@ ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<l
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 ll sqr(int a) { return (ll) a * a; } ld sqr(ld a) { return a * a; } ll sqr(ll a) { return a * a; }
 
-int const NONE = -1;
-int const MANY = INF;
-
 int const N = 200200;
 int const A = 28;
-int const maxCnt = 1010;
-int const maxLen = 111;
 
-int link[N], len[N], next[N][A];
-int who[N], end[N], sz;
+int link[N], len[N], next[N][A], sz;
 
-int get_node(int len, int link, int end) {
+int get_node(int len, int link) {
     ::len[sz] = len;
     ::link[sz] = link;
-    ::end[sz] = end;
-    who[sz] = NONE;
     fill(next[sz], next[sz] + A, -1);
     return sz++;
 }
@@ -46,13 +38,11 @@ int get_node(int len, int link, int end) {
 int copy_node(int v, int len) {
     ::len[sz] = len;
     link[sz] = link[v];
-    end[sz] = end[v];
-    who[sz] = who[v];
     copy(next[v], next[v] + A, next[sz]);
     return sz++;
 }
 
-int append(int v, int x, int i) {
+int append(int v, int x) {
     if (next[v][x] >= 0) {
         int u = next[v][x];
         if (len[v] + 1 != len[u]) {
@@ -66,7 +56,7 @@ int append(int v, int x, int i) {
         }
         return u;
     }
-    int now = get_node(len[v] + 1, 0, i);
+    int now = get_node(len[v] + 1, 0);
     while (v >= 0 && next[v][x] < 0) {
         next[v][x] = now;
         v = link[v];
@@ -89,70 +79,19 @@ int append(int v, int x, int i) {
 }
 
 void solve() {
-    
-    static char s[maxCnt][maxLen];
-
     int n;
     scanf("%d ", &n);
     
-    get_node(0, -1, -1);
-    
-    auto add = [](int& who1, int who2) {
-        if (who2 == NONE) {
-            return;
-        }
-        if (who1 == NONE || who1 == who2) {
-            who1 = who2;
-        } else {
-            who1 = MANY;
-        }
-    };
+    get_node(0, -1);
 
     for (int i = 0; i < n; ++i) {
-        gets(s[i]);
+        static char s[N];
+        gets(s);
         int v = 0;
-        for (int j = 0; s[i][j]; ++j) {
-            int x = s[i][j] - 'a';
-            v = append(v, x, j);
-            add(who[v], i);
+        for (int j = 0; s[j]; ++j) {
+            int x = s[j] - 'a';
+            v = append(v, x);
         }
-    }
-    
-    static int start[maxLen], ord[N];
-    for (int i = 0; i < sz; ++i) {
-        ++start[1 + len[i]];
-    }
-    for (int i = 1; i < maxLen; ++i) {
-        start[i] += start[i - 1];
-    }
-    for (int i = 0; i < sz; ++i) {
-        ord[start[len[i]]++] = i;
-    }
-    
-    for (int i = sz - 1; i > 0; --i) {
-        int x = ord[i];
-        add(who[link[x]], who[x]);
-    }
-    
-    static int from[maxCnt], to[maxCnt];
-    for (int i = 0; i < n; ++i) {
-        to[i] = strlen(s[i]);
-    }
-    
-    for (int i = 1; i < sz; ++i) {
-        int j = who[i];
-        if (j != NONE && j != MANY) {
-            int cur_len = len[link[i]] + 1;
-            if (to[j] - from[j] > cur_len) {
-                to[j] = end[i] + 1;
-                from[j] = to[j] - cur_len;
-            }
-        }
-    }
-    
-    for (int i = 0; i < n; ++i) {
-        s[i][to[i]] = 0;
-        puts(s[i] + from[i]);
     }
 }
 

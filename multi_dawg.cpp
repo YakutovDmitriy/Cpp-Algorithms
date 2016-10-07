@@ -43,18 +43,21 @@ int copy_node(int v, int len) {
 }
 
 int append(int v, int x) {
-    if (next[v][x] >= 0) {
+    static auto const split_link = [&]() {
         int u = next[v][x];
-        if (len[v] + 1 != len[u]) {
-            int w = copy_node(u, len[v] + 1);
-            while (v >= 0 && next[v][x] == u) {
-                next[v][x] = w;
-                v = link[v];
-            }
-            link[u] = w;
-            return w;
+        if (len[v] + 1 == len[u]) {
+            return u;
         }
-        return u;
+        int w = copy_node(u, len[v] + 1);
+        while (v >= 0 && next[v][x] == u) {
+            next[v][x] = w;
+            v = link[v];
+        }
+        link[u] = w;
+        return w;
+    };
+    if (next[v][x] >= 0) {
+        return split_link();
     }
     int now = get_node(len[v] + 1, 0);
     while (v >= 0 && next[v][x] < 0) {
@@ -62,18 +65,7 @@ int append(int v, int x) {
         v = link[v];
     }
     if (v >= 0) {
-        int u = next[v][x];
-        if (len[v] + 1 == len[u]) {
-            link[now] = u;
-        } else {
-            int w = copy_node(u, len[v] + 1);
-            while (v >= 0 && next[v][x] == u) {
-                next[v][x] = w;
-                v = link[v];
-            }
-            link[u] = w;
-            link[now] = w;            
-        }
+        link[now] = split_link();
     }
     return now;
 }

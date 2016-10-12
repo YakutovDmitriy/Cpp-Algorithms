@@ -46,8 +46,8 @@ int main() {
     cerr.precision(6);
     cerr << fixed;
     
-    int tests_c = 1;
-    for (int test_n = 1; test_n <= tests_c; ++test_n)
+    int tcn = 1;
+    for (int tn = 1; tn <= tcn; ++tn)
         solve();
     
 #ifdef LOCAL

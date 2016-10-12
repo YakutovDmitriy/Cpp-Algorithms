@@ -7,7 +7,7 @@ using std::cout; using std::cerr; using std::endl; using std::lower_bound; using
 using std::map; using std::string; using std::fill; using std::copy; using std::sort; using std::unique; using std::unordered_set; 
 using std::multiset; using std::nth_element; using std::min_element; using std::max_element; using std::vector; using std::set; 
 using std::unordered_map; using std::pair; using std::next_permutation; using std::reverse; using std::rotate; using std::cin; 
-using std::iota; using std::function; using std::shuffle;
+using std::iota; using std::function; using std::shuffle; using std::iter_swap;
 
 typedef long long ll;
 typedef long double ld;
@@ -46,7 +46,9 @@ int main() {
     cerr.precision(6);
     cerr << fixed;
     
-    solve();
+    int tests_c = 1;
+    for (int test_n = 1; test_n <= tests_c; ++test_n)
+        solve();
     
 #ifdef LOCAL
     cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;

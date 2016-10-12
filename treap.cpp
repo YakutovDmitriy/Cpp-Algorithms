@@ -112,6 +112,19 @@ Node* root_of(Node* v) {
     return v;
 }
 
+Node* leftmost(Node* v) {
+    while (v && v->l) {
+        v = v->l;
+    }
+    return v;
+}
+
+Node* rightmost(Node* v) {
+    while (v && v->r) {
+        v = v->r;
+    }
+    return v;
+}
 
 
 

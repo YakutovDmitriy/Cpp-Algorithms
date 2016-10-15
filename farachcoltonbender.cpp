@@ -44,7 +44,7 @@ struct SparseTableRMQ {
         }
         t = vector<vector<int>>(sz, vector<int>(a.size()));
         for (int i = 0; i < (int)a.size(); ++i) {
-        	t[0][i] = i;
+            t[0][i] = i;
         }
         for (int i = 1; i < sz; i++) {
             int len = 1 << i;
@@ -71,7 +71,7 @@ struct SparseTableRMQ {
 
 
 struct FCB1 {
-	
+    
     static const int MINIMAL_BLOCK_LENGTH = 5;
 
     vector<int> a;
@@ -84,7 +84,7 @@ struct FCB1 {
 
     template<typename RAI>
     FCB1(RAI A, RAI B) {
-    	vector<int> arr(A, B);
+        vector<int> arr(A, B);
         {
             int lg = 0;
             while ((1 << lg) < (int)arr.size()) {
@@ -115,7 +115,7 @@ struct FCB1 {
                 }
                 blockDp[mask].resize(blockLength);
                 for (int i = 0; i < blockLength; i++) {
-                	blockDp[mask][i].resize(blockLength + 1);
+                    blockDp[mask][i].resize(blockLength + 1);
                     int min = i;
                     for (int j = i + 1; j <= blockLength; j++) {
                         if (cur[j - 1] < cur[min]) {
@@ -140,7 +140,7 @@ struct FCB1 {
             }
         }
         {
-        	vector<int> compressed(blockCount);
+            vector<int> compressed(blockCount);
             for (int i = 0; i < blockCount; i++) {
                 int mask = typeOfBlock[i];
                 int index = i * blockLength + blockDp[mask][0][blockLength];
@@ -195,9 +195,9 @@ struct RMQLCATree {
 
     SparseTableRMQ rmq;
     vector<int> verticeOnPos;
-	vector<int> firstPosition;
-	
-	RMQLCATree() {}
+    vector<int> firstPosition;
+    
+    RMQLCATree() {}
     
     RMQLCATree(vector<vector<int>> const& adjacents, int root) {
         int n = adjacents.size();
@@ -206,8 +206,8 @@ struct RMQLCATree {
         vector<int> depth(n);
         firstPosition = vector<int>(n);
         {
-        	vector<int> vs(n + n + 1);
-        	vector<int> ancs(n + n + 1);
+            vector<int> vs(n + n + 1);
+            vector<int> ancs(n + n + 1);
             int sz = 0;
             vs[sz] = root;
             ancs[sz++] = root;
@@ -260,7 +260,7 @@ struct FarachColtonBenderRMQ {
 
     template<typename RAI>
     FarachColtonBenderRMQ(RAI A, RAI B) {
-    	vector<int> arr(A, B);
+        vector<int> arr(A, B);
         int n = arr.size();
         vector<int> left(n, -1);
         vector<int> right(n, -1);
@@ -285,7 +285,7 @@ struct FarachColtonBenderRMQ {
         vector<vector<int>> adjacents(n);
         int root = -1;
         for (int i = 0; i < n; i++) {
-        	adjacents[i].resize(2);
+            adjacents[i].resize(2);
             adjacents[i][0] = left[i];
             adjacents[i][1] = right[i];
             if (anc[i] < 0) {
@@ -301,75 +301,75 @@ struct FarachColtonBenderRMQ {
 };
 
 int rnd(int x, int y) {
-	static auto gen = std::bind(std::uniform_int_distribution<int>(), std::mt19937());
-	return gen() % (y - x + 1) + x;
+    static auto gen = std::bind(std::uniform_int_distribution<int>(), std::mt19937());
+    return gen() % (y - x + 1) + x;
 }
 
 ll timer() {
-	return (ld) clock() / CLOCKS_PER_SEC * 1000;
+    return (ld) clock() / CLOCKS_PER_SEC * 1000;
 }
 
 int const N = 5000000;
 int const ITERS = 100000000;
 
 void solve() {
-	int n = N;
-	vector<int> a(n);
-	for (int i = 0; i < n; ++i) {
-		a[i] = rnd(0, INF);
-	}
-	
-	int built1 = timer();
-	FarachColtonBenderRMQ rmq1(a.begin(), a.end());
-	built1 = timer() - built1;
-	
-	int built2 = timer();
-	SparseTableRMQ rmq2(a.begin(), a.end());
-	built2 = timer() - built2;
-	
-	cerr << "built in " << timer() << endl;
-	
-	int sum1 = 0;
-	int sum2 = 0;
-	
-	for (int it = 0; it < ITERS; ++it) {
-	
-		int from = rnd(0, n - 1);
-		int to = rnd(from + 1, n);
-		
-		int start = timer();
-		int p1 = rmq1.getMinPos(from, to);
-		sum1 += timer() - start;
-		
-		start = timer();
-		int p2 = rmq2.getMinPos(from, to);
-		sum2 += timer() - start;
-		
-		assert(p1 == p2);
-	
-	}
-	
-	ld avg1 = (ld) sum1 / ITERS;
-	ld avg2 = (ld) sum2 / ITERS;
-	
-	cerr << "FCB: built in " << built1 << " ms and for query " << (double) avg1 << " ms" << endl;
-	cerr << "SpT: built in " << built2 << " ms and for query " << (double) avg2 << " ms" << endl;
+    int n = N;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        a[i] = rnd(0, INF);
+    }
+    
+    int built1 = timer();
+    FarachColtonBenderRMQ rmq1(a.begin(), a.end());
+    built1 = timer() - built1;
+    
+    int built2 = timer();
+    SparseTableRMQ rmq2(a.begin(), a.end());
+    built2 = timer() - built2;
+    
+    cerr << "built in " << timer() << endl;
+    
+    int sum1 = 0;
+    int sum2 = 0;
+    
+    for (int it = 0; it < ITERS; ++it) {
+    
+        int from = rnd(0, n - 1);
+        int to = rnd(from + 1, n);
+        
+        int start = timer();
+        int p1 = rmq1.getMinPos(from, to);
+        sum1 += timer() - start;
+        
+        start = timer();
+        int p2 = rmq2.getMinPos(from, to);
+        sum2 += timer() - start;
+        
+        assert(p1 == p2);
+    
+    }
+    
+    ld avg1 = (ld) sum1 / ITERS;
+    ld avg2 = (ld) sum2 / ITERS;
+    
+    cerr << "FCB: built in " << built1 << " ms and for query " << (double) avg1 << " ms" << endl;
+    cerr << "SpT: built in " << built2 << " ms and for query " << (double) avg2 << " ms" << endl;
 }
 
 
 
 int main() {
 
-	cout.precision(15);
-	cout << fixed;
-	cerr.precision(6);
-	cerr << fixed;
-	
-	srand(1510);
+    cout.precision(15);
+    cout << fixed;
+    cerr.precision(6);
+    cerr << fixed;
+    
+    srand(1510);
 
-	solve();
+    solve();
 
 #ifdef LOCAL
-	cerr << "time: " << timer() << " ms" << endl;
+    cerr << "time: " << timer() << " ms" << endl;
 #endif
 }

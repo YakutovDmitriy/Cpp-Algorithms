@@ -51,25 +51,30 @@ void clear_graph() {
     }
 }
 
-void add_edge(int v, int to, int cap, int cost) {
-    g[v].push_back(edges.size());
+int add_edge(int v, int to, int cap, int cost) {
+    int ret;
+    g[v].push_back(ret = edges.size());
     edges.emplace_back(to, cap, cost);
     g[to].push_back(edges.size());
     edges.emplace_back(v, 0, -cost);
+    return ret;
 }
 
-pair<ll, int> min_cost_max_flow(int source, int sink, int n) {
+pair<ll, ll> min_cost_flow(int source, int sink, int n, ll need_flow) {
     ll cost = 0;
-    int flow = 0;
-    while (true) {
-        static int q[N * N], in_q[N], dist[N], prev[N];
+    ll flow = 0;
+    while (flow < need_flow) {
+        static int q[N], in_q[N], dist[N], prev[N];
         int tail = 0;
         q[tail++] = source;
         fill(dist, dist + n, INF);
         dist[source] = 0;
         in_q[source] = true;
-        for (int head = 0; head < tail; ++head) {
+        for (int head = 0; head != tail;) {
             int v = q[head];
+            ++head;
+            if (head == N)
+                head = 0;
             in_q[v] = false;
             for (int x : g[v]) {
                 edge_t const& e = edges[x];
@@ -79,6 +84,8 @@ pair<ll, int> min_cost_max_flow(int source, int sink, int n) {
                     prev[to] = x;
                     if (!in_q[to]) {
                         q[tail++] = to;
+                        if (tail == N)
+                            tail = 0;
                         in_q[to] = true;
                     }
                 }
@@ -87,10 +94,10 @@ pair<ll, int> min_cost_max_flow(int source, int sink, int n) {
         if (dist[sink] == INF) {
             break;
         }
-        int cur_flow = INF;
+        ll cur_flow = need_flow - flow;
         for (int v = sink; v != source;) {
             int x = prev[v];
-            cur_flow = min(cur_flow, edges[x].cap - edges[x].flow);
+            cur_flow = min<ll>(cur_flow, edges[x].cap - edges[x].flow);
             v = edges[x ^ 1].to;
         }
         flow += cur_flow;
@@ -103,6 +110,10 @@ pair<ll, int> min_cost_max_flow(int source, int sink, int n) {
         }
     }
     return {cost, flow};
+}
+
+pair<ll, ll> min_cost_max_flow(int source, int sink, int n) {
+    return min_cost_flow(source, sink, n, INFL);
 }
 
 
@@ -157,14 +168,19 @@ void solve() {
 
 
 int main() {
-
+    
+    //freopen("", "r", stdin);
+    //freopen("", "w", stdout);
+    
     cout.precision(15);
     cout << fixed;
     cerr.precision(6);
     cerr << fixed;
     
-    solve();
-
+    int tcn = 1;
+    for (int tn = 1; tn <= tcn; ++tn)
+        solve();
+    
 #ifdef LOCAL
     cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;
 #endif

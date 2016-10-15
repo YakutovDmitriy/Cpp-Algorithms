@@ -7,7 +7,7 @@ using std::cout; using std::cerr; using std::endl; using std::lower_bound; using
 using std::map; using std::string; using std::fill; using std::copy; using std::sort; using std::unique; using std::unordered_set; 
 using std::multiset; using std::nth_element; using std::min_element; using std::max_element; using std::vector; using std::set; 
 using std::unordered_map; using std::pair; using std::next_permutation; using std::reverse; using std::rotate; using std::cin; 
-using std::iota; using std::function; using std::shuffle; using std::iter_swap;
+using std::iota; using std::function; using std::shuffle; using std::iter_swap; using std::ofstream; using std::ifstream;
 
 typedef long long ll;
 typedef long double ld;

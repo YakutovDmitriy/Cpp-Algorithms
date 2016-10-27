@@ -141,17 +141,19 @@ void solve() {
 
 
 int main() {
-    
+
     //freopen("", "r", stdin);
     //freopen("", "w", stdout);
-    
+
     cout.precision(15);
     cout << fixed;
     cerr.precision(6);
     cerr << fixed;
-    
-    solve();
-    
+
+    int tcn = 1;
+    for (int tn = 1; tn <= tcn; ++tn)
+        solve();
+
 #ifdef LOCAL
     cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;
 #endif

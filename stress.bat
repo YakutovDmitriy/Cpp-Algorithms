@@ -21,7 +21,7 @@ if errorlevel 1 (
     exit
 )
 
-fc a stupid > diff
+fc a_out stupid_out > diff
 if errorlevel 1 (
     echo test found: wa
     exit

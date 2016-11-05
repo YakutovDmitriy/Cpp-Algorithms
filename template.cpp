@@ -15,9 +15,9 @@ ll const INFL = 100 + (ll) 1e18;
 ld const PI = 3.141592653589793238462643L;
 mt19937 tw(960172);
 
-bool is_prime(ll x) { if (x <= 1) return 0; for (ll y = 2; y * y <= x; ++y) if (x % y == 0) return 0; return 1; }
-ll rnd(ll x, ll y) { static auto d = uniform_int_distribution<ll>(); return d(tw) % (y - x + 1) + x; }
 ll sqr(int a) { return (ll) a * a; } ld sqr(ld a) { return a * a; } ll sqr(ll a) { return a * a; }
+bool is_prime(ll x) { for (ll y = 2; y * y <= x; ++y) if (x % y == 0) return 0; return x > 1; }
+ll rnd(ll x, ll y) { static uniform_int_distribution<ll> d; return d(tw) % (y - x + 1) + x; }
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 
 

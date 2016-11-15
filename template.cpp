@@ -1,9 +1,15 @@
 #include <bits/stdc++.h>
 //#include <fcntl.h>
+#ifndef LOCAL
+#  define cerr get_CE
+#endif
 
 using namespace std;
-#define next nachster
-#define prev zuruck
+#define next Nachster
+#define prev Zuruck
+#define right Rechts
+#define left Links
+#define index Verzeichnis
 
 typedef long long ll;
 typedef long double ld;
@@ -39,8 +45,10 @@ int main() {
 
     cout.precision(15);
     cout << fixed;
+#ifdef LOCAL
     cerr.precision(6);
     cerr << fixed;
+#endif
 
     int tcn = 1;
     for (int tn = 1; tn <= tcn; ++tn)

@@ -31,11 +31,12 @@ ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 int const FN = 200200;
 
 vector<int> g[FN];
-int py[FN], px[FN], dist[FN], used[FN], ver;
+int py[FN], px[FN], dist[FN], used[FN], ver, ind[FN];
 
 int dfs(int v) {
     used[v] = ver;
-    for (int to : g[v]) {
+    for (int& i = ind[v]; i < (int)g[v].size(); ++i) {
+        int to = g[v][i];
         int u = px[to];
         if (u < 0 || (used[u] != ver && dist[u] == dist[v] + 1 && dfs(u))) {
             px[to] = v;
@@ -75,6 +76,7 @@ int matching(int L, int R) {
         if (!was) {
             break;
         }
+        fill(ind, ind + L, 0);
         ++ver;
         for (int i = 0; i < L; ++i) {
             if (py[i] < 0 && used[i] != ver) {

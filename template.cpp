@@ -1,20 +1,28 @@
 #include <bits/stdc++.h>
 //#include <fcntl.h>
 #ifndef LOCAL
-#  define cerr get_CE
+#  define cerr __get_ce
 #endif
 
 using namespace std;
-#define next Nachster
-#define prev Zuruck
-#define right Rechts
-#define left Links
-#define index Verzeichnis
+#define next __next
+#define prev __prev
+#define right __right
+#define left __left
+#define index __index
 
 typedef long long ll;
 typedef long double ld;
 typedef unsigned int uint;
 typedef unsigned long long ull;
+
+typedef pair<int, int> pii;
+typedef pair<int, int> ipair;
+#define szof(x) ((int)(x).size())
+#define ff first
+#define ss second
+#define puba push_back
+#define bend(x) (x).begin(), (x).end()
 
 int const INF = 100 + (int) 1e9;
 ll const INFL = 100 + (ll) 1e18;
@@ -35,7 +43,6 @@ void solve() {
     
     
 }
-
 
 
 int main() {

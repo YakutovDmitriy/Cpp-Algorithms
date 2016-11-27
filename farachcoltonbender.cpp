@@ -193,7 +193,7 @@ struct FCB1 {
 
 struct RMQLCATree {
 
-    SparseTableRMQ rmq;
+    FCB1 rmq;
     vector<int> verticeOnPos;
     vector<int> firstPosition;
     
@@ -235,7 +235,7 @@ struct RMQLCATree {
         for (int i = 0; i < curPos; i++) {
             toRmq[i] = depth[verticeOnPos[i]];
         }
-        rmq = SparseTableRMQ(toRmq.begin(), toRmq.end());
+        rmq = FCB1(toRmq.begin(), toRmq.end());
     }
 
     int getLCA(int a, int b) {

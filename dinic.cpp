@@ -25,30 +25,30 @@ ll sqr(int a) { return (ll) a * a; } ld sqr(ld a) { return a * a; } ll sqr(ll a)
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 
 
-int const N = 100100;
+int const N = 200200;
 
 struct edge_t {
     int to, cap, flow;
     
-    edge_t() {}
-    
-    edge_t(int to, int cap) :
-        to(to), cap(cap), flow(0) {}
+    edge_t(int to, int cap)
+        : to(to)
+        , cap(cap)
+        , flow(0)
+    {}
 };
 
 vector<edge_t> all;
 vector<int> g[N];
+int index[N], dist[N];
 
-int add_edge(int from, int to, int cap) {
-    int ret;
-    g[from].push_back(ret = all.size());
-    all.emplace_back(to, cap);
+void add_edge(int from, int to, int cap1, int cap2) {
+    g[from].push_back(all.size());
+    all.emplace_back(to, cap1);
     g[to].push_back(all.size());
-    all.emplace_back(from, 0);
-    return ret;
+    all.emplace_back(from, cap2);
 }
 
-void clear_graph(int n) {
+void init_graph(int n) {
     all.clear();
     for (int i = 0; i < n; ++i) {
         g[i].clear();
@@ -61,21 +61,20 @@ void clear_flow() {
     }
 }
 
-int index[N];
-int dist[N];
-
 int dfs(int v, int sink, int flow) {
     if (v == sink || flow == 0) {
         return flow;
     }
-    for (int& x = index[v]; x < (int)g[v].size(); ++x) {
-        int i = g[v][x];
-        auto& e = all[i];
-        if (e.flow < e.cap && dist[v] + 1 == dist[e.to]) {
-            int now = dfs(e.to, sink, min(flow, e.cap - e.flow));
+    for (int& i = index[v]; i < (int)g[v].size(); ++i) {
+        int x = g[v][i];
+        auto& e = all[x];
+        int to = e.to;
+        int diff = e.cap - e.flow;
+        if (diff > 0 && dist[v] - 1 == dist[to]) {
+            int now = dfs(to, sink, min(flow, diff));
             if (now > 0) {
                 e.flow += now;
-                all[i ^ 1].flow -= now;
+                all[x ^ 1].flow -= now;
                 return now;
             }
         }
@@ -84,27 +83,26 @@ int dfs(int v, int sink, int flow) {
 }
 
 ll max_flow(int source, int sink, int n) {
+    clear_flow();
     ll ret = 0;
     while (true) {
         static int q[N];
-        fill(dist, dist + n, INF);
-        dist[source] = 0;
+        memset(dist, 63, sizeof(int) * n);
         int tail = 0;
-        q[tail++] = source;
+        dist[q[tail++] = sink] = 0;
         for (int i = 0; i < tail; ++i) {
             int v = q[i];
-            for (int i : g[v]) {
-                auto e = all[i];
-                if (e.flow < e.cap && dist[e.to] == INF) {
-                    dist[e.to] = dist[v] + 1;
-                    q[tail++] = e.to;
+            for (int x : g[v]) {
+                int to = all[x].to;
+                if (all[x ^ 1].flow < all[x ^ 1].cap && dist[to] > INF) {
+                    dist[q[tail++] = to] = dist[v] + 1;
                 }
             }
         }
-        if (dist[sink] == INF) {
+        if (dist[source] > INF) {
             break;
         }
-        fill(index, index + n, 0);
+        memset(index, 0, n * sizeof(int));
         while (int flow = dfs(source, sink, INF)) {
             ret += flow;
         }
@@ -115,7 +113,6 @@ ll max_flow(int source, int sink, int n) {
 
 
 void solve() {
-    
     
     
     

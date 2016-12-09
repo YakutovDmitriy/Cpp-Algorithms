@@ -28,10 +28,10 @@ ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 
 
 
-int const FN = 200200;
+int const N = 200200;
 
-vector<int> g[FN];
-int py[FN], px[FN], dist[FN], used[FN], ver, ind[FN];
+vector<int> g[N];
+int py[N], px[N], dist[N], used[N], ver, ind[N];
 
 int dfs(int v) {
     used[v] = ver;
@@ -52,7 +52,7 @@ int matching(int L, int R) {
     fill(px, px + R, -1);
     int ret = 0;
     while (true) {
-        static int q[FN];
+        static int q[N];
         int tail = 0;
         for (int i = 0; i < L; ++i) {
             if (py[i] < 0) {

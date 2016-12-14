@@ -1,8 +1,10 @@
-#include <bits/stdc++.h>
-//#include <fcntl.h>
-#ifndef LOCAL
+#ifdef LOCAL
+#  define _GLIBCXX_DEBUG
+#else
 #  define cerr __get_ce
 #endif
+#include <bits/stdc++.h>
+//#include <fcntl.h>
 
 using namespace std;
 #define next __next
@@ -40,27 +42,21 @@ ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 void solve() {
     
     
-    
-    
 }
 
 
 int main() {
-
-    //freopen("", "r", stdin);
-    //freopen("", "w", stdout);
-
+//    freopen("", "r", stdin);
+//    freopen("", "w", stdout);
     cout.precision(15);
     cout << fixed;
 #ifdef LOCAL
     cerr.precision(6);
     cerr << fixed;
 #endif
-
     int tcn = 1;
     for (int tn = 1; tn <= tcn; ++tn)
         solve();
-
 #ifdef LOCAL
     cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;
 #endif

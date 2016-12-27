@@ -137,7 +137,8 @@ comp_t polar(double angle) {
 }
 
 ostream& operator<<(ostream& os, comp_t const& c) {
-    return os << '(' << c.x << ", " << c.y << ')';
+    return os << c.x << " + " << c.y << " i";
+    //return os << '(' << c.x << ", " << c.y << ')';
 }
 
 istream& operator>>(istream& is, comp_t& c) {
@@ -149,7 +150,6 @@ istream& operator>>(istream& is, comp_t& c) {
 
 
 void solve() {
-    
     
     
     

@@ -80,6 +80,10 @@ bool operator==(point_t const& a, point_t const& b) {
     return a.x == b.x && a.y == b.y;
 }
 
+bool operator!=(point_t const& a, point_t const& b) {
+    return a.x != b.x || a.y != b.y;
+}
+
 bool operator>(point_t const& a, point_t const& b) {
     return a.x > b.x || (a.x == b.x && a.y > b.y);
 }

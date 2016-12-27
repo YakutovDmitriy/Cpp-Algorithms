@@ -48,14 +48,12 @@ void solve() {
 int main() {
 //    freopen("", "r", stdin);
 //    freopen("", "w", stdout);
-    cout.precision(15);
-    cout << fixed;
+    cout << setprecision(15) << fixed;
 #ifdef LOCAL
-    cerr.precision(6);
-    cerr << fixed;
+    cerr << setprecision(6) << fixed;
 #endif
-    int tcn = 1;
-    for (int tn = 1; tn <= tcn; ++tn)
+    int tcnt = 1;
+    for (int test = 1; test <= tcnt; ++test)
         solve();
 #ifdef LOCAL
     cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;

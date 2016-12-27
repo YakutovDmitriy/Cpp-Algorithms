@@ -61,7 +61,7 @@ struct comp {
     }
 };
 
-comp operator*(comp const& a, comp const& b) {
+comp operator*(comp a, comp const& b) {
     return a *= b;
 }
 
@@ -133,9 +133,6 @@ void mul(int sz) {
 }
 
 void solve() {
-    
-    
-    
     
     
     

@@ -1,5 +1,5 @@
 #ifdef LOCAL
-//#  define _GLIBCXX_DEBUG
+#  define _GLIBCXX_DEBUG
 #else
 #  define cerr __get_ce
 #endif
@@ -36,13 +36,63 @@ ll sqr(int a) { return (ll) a * a; } template<class T> T sqr(T const& a) { retur
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 
 
+int const mod = 1000000007;
+
+void add(int& a, int b) {
+    if ((a += b) >= mod)
+        a -= mod;
+}
+
+int sum(int a, int b) {
+    if ((a += b) >= mod)
+        a -= mod;
+    return a;
+}
+
+int prod(int a, int b) {
+    ull x = (ull) a * b;
+    uint xh = x >> 32, xl = x, q, r;
+#ifdef __GNUC__
+    asm(
+        "divl %4; \n\t"
+        : "=a" (q), "=d" (r)
+        : "d" (xh), "a" (xl), "r" (mod)
+    );
+#else
+    __asm {
+        mov edx, dword ptr[xh];
+        mov eax, dword ptr[xl];
+        div dword ptr[mod];
+        mov dword ptr[q], eax;
+        mov dword ptr[r], edx;
+    };
+#endif
+    return r;
+}
+
+void mul(int& a, int b) {
+    a = prod(a, b);
+}
+
+int modpow(int a, ll b) {
+    int ret = 1;
+    for (; b > 0; b /= 2) {
+        if (b % 2 == 1)
+            mul(ret, a);
+        mul(a, a);
+    }
+    return ret;
+}
+
+
+
 void solve() {
     
 }
 
 int main() {
-    //freopen("", "r", stdin);
-    //freopen("", "w", stdout);
+//    freopen("", "r", stdin);
+//    freopen("", "w", stdout);
     cout << setprecision(15) << fixed;
 #ifdef LOCAL
     cerr << setprecision(6) << fixed;

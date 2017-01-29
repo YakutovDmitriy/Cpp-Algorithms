@@ -5,6 +5,23 @@
 #endif
 #include <bits/stdc++.h>
 
+namespace {
+    int const input_size = 10100100;
+    char input[input_size];
+    int inptr = 0;
+    
+    int next_int() {
+        while (input[inptr] < 33)
+            ++inptr;
+        bool sign = input[inptr] == '-';
+        inptr += sign;
+        int ret = 0;
+        while (input[inptr] > 32)
+            ret = 10 * ret + input[inptr++] - '0';
+        return sign ? -ret : ret;
+    }
+}
+
 using namespace std;
 #define next __next
 #define prev __prev
@@ -35,7 +52,6 @@ ll rnd(ll x, ll y) { static uniform_int_distribution<ll> d; return d(tw) % (y - 
 ll sqr(int a) { return (ll) a * a; } template<class T> T sqr(T const& a) { return a * a; }
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 
-
 void solve() {
     
 }
@@ -47,8 +63,9 @@ int main() {
 #ifdef LOCAL
     cerr << setprecision(6) << fixed;
 #endif
+    fread(input, 1, input_size, stdin);
     int tcnt = 1;
-    //scanf("%d", &tcnt);
+    //tcnt = next_int();
     for (int test = 1; test <= tcnt; ++test)
         solve();
 #ifdef LOCAL

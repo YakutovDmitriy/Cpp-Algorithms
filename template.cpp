@@ -17,12 +17,8 @@ typedef long double ld;
 typedef unsigned int uint;
 typedef unsigned long long ull;
 
-typedef pair<int, int> pii;
 typedef pair<int, int> ipair;
 #define szof(x) ((int)(x).size())
-#define ff first
-#define ss second
-#define puba push_back
 #define bend(x) (x).begin(), (x).end()
 
 int const INF = 100 + (int) 1e9;

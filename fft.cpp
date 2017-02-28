@@ -1,157 +1,134 @@
+#ifdef LOCAL
+//#  define _GLIBCXX_DEBUG
+#else
+#  define cerr __get_ce
+#endif
 #include <bits/stdc++.h>
-//#include <fcntl.h>
 
-using std::max; using std::swap; using std::abs; using std::priority_queue; using std::queue; using std::bitset; using std::make_tuple; 
-using std::istream; using std::ostream; using std::fixed; using std::greater; using std::tuple; using std::tie; using std::make_pair;
-using std::cout; using std::cerr; using std::endl; using std::lower_bound; using std::upper_bound; using std::deque; using std::min; 
-using std::map; using std::string; using std::fill; using std::copy; using std::sort; using std::unique; using std::unordered_set; 
-using std::multiset; using std::nth_element; using std::min_element; using std::max_element; using std::vector; using std::set; 
-using std::unordered_map; using std::pair; using std::next_permutation; using std::reverse; using std::rotate; using std::cin; 
-using std::iota; using std::function; using std::shuffle; using std::iter_swap;
+using namespace std;
+#define next __next
+#define prev __prev
+#define right __right
+#define left __left
+#define index __index
 
 typedef long long ll;
 typedef long double ld;
 typedef unsigned int uint;
 typedef unsigned long long ull;
 
+typedef pair<int, int> pii;
+typedef pair<int, int> ipair;
+#define szof(x) ((int)(x).size())
+#define bend(x) (x).begin(), (x).end()
+
 int const INF = 100 + (int) 1e9;
 ll const INFL = 100 + (ll) 1e18;
 ld const PI = 3.141592653589793238462643L;
-std::mt19937 mt19937(960172);
+mt19937 tw(960172);
 
-ll rnd(ll x, ll y) { static auto gen = std::bind(std::uniform_int_distribution<ll>(), mt19937); return gen() % (y - x + 1) + x; }
-bool is_prime(ll x) { if (x <= 1) return 0; for (ll y = 2; y * y <= x; ++y) if (x % y == 0) return 0; return 1; }
-ll sqr(int a) { return (ll) a * a; } ld sqr(ld a) { return a * a; } ll sqr(ll a) { return a * a; }
+bool is_prime(ll x) { for (ll y = 2; y * y <= x; ++y) if (x % y == 0) return 0; return x > 1; }
+ll rnd(ll x, ll y) { static uniform_int_distribution<ll> d; return d(tw) % (y - x + 1) + x; }
+ll sqr(int a) { return (ll) a * a; } template<class T> T sqr(T const& a) { return a * a; }
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 
+typedef double ffld;
+int const N = 1100100;
+int const LOG = 22;
 
-int const N = 200100;
+ffld wre[LOG][N], wim[LOG][N];
+int bitr[N];
 
-struct comp {
-    double re, im;
-    
-    comp() : 
-        re(0), im(0) {}
-    
-    comp(int x) : 
-        re(x), im(0) {}
-    
-    comp(double a, double b) : 
-        re(a), im(b) {}
-    
-    comp operator+(comp const& a) const {
-        return comp(re + a.re, im + a.im);
-    }
-
-    comp operator-(comp const& a) const {
-        return comp(re - a.re, im - a.im);
-    }
-
-    comp& operator*=(comp const& a) {
-        double newRe = re * a.re - im * a.im;
-        im = re * a.im + im * a.re;
-        re = newRe;
-        return *this;
-    }
-
-    comp& operator/=(double a) {
-        re /= a;
-        im /= a;
-        return *this;
-    }
-};
-
-comp operator*(comp a, comp const& b) {
-    return a *= b;
+inline void cmul(ffld& x, ffld& y, ffld xx, ffld yy) {
+    ffld newx = x * xx - y * yy;
+    y = y * xx + yy * x;
+    x = newx;
 }
 
-void FFT(comp* a, int n, bool const inv) {                                           
-    for (int i = 1, j = 0; i < n; ++i) {                                                                                    
-        int bit = n >> 1;                                                                                         
-        while (j >= bit) {
-            j -= bit;
-            bit >>= 1;
+void init_fft() {
+    for (int logl = 1, len = 2; len < N; ++logl, len *= 2) {
+        for (int j = 0; j < len / 2; ++j) {
+            ffld ang = 2 * PI * j / len;
+            wre[logl][j] = cos(ang);
+            wim[logl][j] = sin(ang);
         }
-        j += bit;
-        if (i < j) {                                                                            
-            std::swap(a[i], a[j]);                                                                                 
-        }                                                                                                         
     }
-    for (int len = 2; len <= n; len <<= 1) {                            
-        double angle = 2 * PI / len;                                
-        if (inv) {                                                  
-            angle = -angle;                                     
-        }                                                           
-        comp const g(cos(angle), sin(angle));                
-        for (int i = 0; i < n; i += len) {                          
-            comp r = comp(1);                                   
-            for (int j = 0; j < len / 2; ++j) {                 
-                comp x = a[i + j];                          
-                comp y = r * a[i + j + len / 2];            
-                a[i + j] = x + y;                           
-                a[i + j + len / 2] = x - y;                 
-                r *= g;                                  
-            }                                                                                                  
-        }                                                                                                              
-    }                                                                                                                                                         
+}
+
+void fft(ffld* re, ffld* im, int n, bool inv) {
+    for (int i = 0; i < n; ++i) {
+        if (i < bitr[i]) {
+            swap(re[i], re[bitr[i]]);
+            swap(im[i], im[bitr[i]]);
+        }
+    }
+    for (int logl = 1, len = 2; len <= n; ++logl, len *= 2) {
+        for (int i = 0; i < n; i += len) {
+            for (int j = 0; j < len / 2; ++j) {
+                ffld re2 = re[i + j + len / 2], im2 = im[i + j + len / 2];
+                cmul(re2, im2, wre[logl][j], (inv ? -wim[logl][j] : wim[logl][j]));
+                re[i + j + len / 2] = re[i + j] - re2;
+                im[i + j + len / 2] = im[i + j] - im2;
+                re[i + j] += re2;
+                im[i + j] += im2;
+            }
+        }
+    }
     if (inv) {
         for (int i = 0; i < n; ++i) {
-            a[i] /= n;
+            re[i] /= n;
+            im[i] /= n;
         }
     }
 }
 
-int p1[N], p2[N], p3[N];
-
-comp ta[N], tb[N];
-
-void mul(int sz) {
-    int n = 1;
-    while (n < sz) {
-        n <<= 1;
+int mul(int* a, int sa, int* b, int sb, ll* c) {
+    int deg = sa + sb - 1;
+    int n = 2, logn = 1;
+    while (n < deg) {
+        n *= 2;
+        ++logn;
     }
-    n <<= 1;
-    for (int i = 0; i < sz; ++i) {
-        ta[i] = comp(p1[i]);
+    bitr[0] = 0;
+    for (int i = 1; i < n; ++i) {
+        bitr[i] = bitr[i >> 1] >> 1 | ((i & 1) << (logn - 1));
     }
-    for (int i = 0; i < sz; ++i) {
-        tb[i] = comp(p2[i]);
-    }
-    for (int i = sz; i < n; ++i) {
-        ta[i] = 0;
-        tb[i] = 0;
-    }
-    FFT(ta, n, false);
-    FFT(tb, n, false);
+    static ffld are[N], aim[N], bre[N], bim[N];
+    copy(a, a + sa, are);
+    fill(are + sa, are + n, 0);
+    fill(aim, aim + n, 0);
+    copy(b, b + sb, bre);
+    fill(bre + sb, bre + n, 0);
+    fill(bim, bim + n, 0);
+    fft(are, aim, n, false);
+    fft(bre, bim, n, false);
     for (int i = 0; i < n; ++i) {
-        ta[i] *= tb[i];
+        cmul(are[i], aim[i], bre[i], bim[i]);
     }
-    FFT(ta, n, true);
-    for (int i = 0; i < n; ++i) {
-        p3[i] = (int) (ta[i].re + 0.5);
+    fft(are, aim, n, true);
+    for (int i = 0; i < deg; ++i) {
+        c[i] = (ll)(are[i] + 0.5);
     }
+    return deg;
 }
+
 
 void solve() {
-    
-    
-    
+    init_fft();
+
 }
 
-
-
 int main() {
-    
     //freopen("", "r", stdin);
     //freopen("", "w", stdout);
-    
-    cout.precision(15);
-    cout << fixed;
-    cerr.precision(6);
-    cerr << fixed;
-    
-    solve();
-    
+    cout << setprecision(15) << fixed;
+#ifdef LOCAL
+    cerr << setprecision(6) << fixed;
+#endif
+    int tcnt = 1;
+    //scanf("%d", &tcnt);
+    for (int test = 1; test <= tcnt; ++test)
+        solve();
 #ifdef LOCAL
     cerr << "time: " << (ll) clock() * 1000 / CLOCKS_PER_SEC << " ms" << endl;
 #endif

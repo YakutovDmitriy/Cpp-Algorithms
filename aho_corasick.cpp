@@ -34,8 +34,64 @@ ll rnd(ll x, ll y) { static uniform_int_distribution<ll> d; return d(tw) % (y - 
 ll sqr(int a) { return (ll) a * a; } template<class T> T sqr(T const& a) { return a * a; }
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 
+int const N = 100100;
+int const A = 130;
+
+int go[N][A], link[N];
+bool leaf[N];
+
 void solve() {
-    
+    static char str[N];
+    int n;
+    scanf("%d", &n);
+    gets(str);
+    memset(go, -1, sizeof go);
+    int sz = 1;
+    for (int i = 0; i < n; ++i) {
+        gets(str);
+        int v = 0;
+        for (int j = 0; str[j]; ++j) {
+            int x = str[j];
+            if (go[v][x] < 0)
+                go[v][x] = sz++;
+            v = go[v][x];
+        }
+        leaf[v] = true;
+    }
+    static int q[N];
+    int tail = 0;
+    link[0] = 0;
+    for (int x = 0; x < A; ++x) {
+        if (go[0][x] >= 0) {
+            link[go[0][x]] = 0;
+            q[tail++] = go[0][x];
+        } else {
+            go[0][x] = 0;
+        }
+    }
+    for (int head = 0; head < tail; ++head) {
+        int v = q[head];
+        leaf[v] |= leaf[link[v]];
+        for (int x = 0; x < A; ++x) {
+            if (go[v][x] >= 0) {
+                link[go[v][x]] = go[link[v]][x];
+                q[tail++] = go[v][x];
+            } else {
+                go[v][x] = go[link[v]][x];
+            }
+        }
+    }
+    while (fgets(str, N, stdin)) {
+        int v = 0;
+        bool ans = false;
+        for (int i = 0; str[i] > 31; ++i) {
+            int x = str[i];
+            v = go[v][x];
+            ans |= leaf[v];
+        }
+        if (ans)
+            cout << str;
+    }
 }
 
 int main() {

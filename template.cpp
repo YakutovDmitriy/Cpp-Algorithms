@@ -34,6 +34,7 @@ ll rnd(ll x, ll y) { static uniform_int_distribution<ll> d; return d(tw) % (y - 
 ll sqr(int a) { return (ll) a * a; } template<class T> T sqr(T const& a) { return a * a; }
 ll gcd(ll a, ll b) { while (b > 0) { ll t = a % b; a = b; b = t; } return a; }
 
+
 void solve() {
     
 }

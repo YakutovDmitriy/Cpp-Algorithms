@@ -175,7 +175,46 @@ bool intersect(point_t const& a, point_t const& b, point_t const& c, point_t con
     return turn(a, c, b) * turn(a, b, d) >= 0 && turn(c, a, d) * turn(c, d, b) >= 0;
 }
 
+/// build convex hull using Graham algorithm
+void graham(vector<point_t>& a) {
+    if (a.size() == 1u)
+        return;
+    iter_swap(a.begin(), min_element(a.begin(), a.end()));
+    sort(a.begin() + 1, a.end(), [&](point_t const& p, point_t const& q) {
+        int t = turn(a[0], p, q);
+        if (t != 0)
+            return t > 0;
+        return p < q;
+    });
+    int c = 0;
+    for (point_t const& p : a) {
+        while (c > 1 && turn(a[c - 2], a[c - 1], p) <= 0)
+            --c;
+        a[c++] = p;
+    }
+    if (c < (int)a.size())
+        a.erase(a.begin() + c, a.end());
+}
 
+/// build convex hull using Andrew algorithm
+void andrew(vector<point_t>& a) {    if (a.size() == 1u)
+        return;
+    sort(a.begin(), a.end());
+    vector<point_t> d, u;
+    for (point_t const& p : a) {
+        while (d.size() > 1u && turn(d[d.size() - 2u], d[d.size() - 1u], p) <= 0)
+            d.pop_back();
+        d.push_back(p);
+        while (u.size() > 1u && turn(u[u.size() - 2u], u[u.size() - 1u], p) >= 0)
+            u.pop_back();
+        u.push_back(p);
+    }
+    u.pop_back();
+    reverse(u.begin(), u.end());
+    u.pop_back();
+    d.insert(d.end(), u.begin(), u.end());
+    a = d;
+}
 
 
 void solve() {
